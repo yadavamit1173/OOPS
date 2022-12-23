@@ -1,0 +1,71 @@
+In C++, the static keyword can be used in several different contexts, each with its own meaning.
+
+When applied to a global variable or function, static indicates that the variable or function has internal linkage, 
+meaning it can only be used within the translation unit (i.e., the source file and any headers included by that source file) 
+in which it is defined. This can be useful for hiding the implementation details of a function or variable from other parts
+of the program.
+
+When applied to a local variable in a function, static indicates that the variable retains its value between function calls. 
+This can be useful for maintaining state across function calls without using global variables.
+
+When applied to a class data member,
+static indicates that the member is shared by all instances of the class.
+This means that there is only one copy of the member, regardless of how many instances of the class are created.
+
+When applied to a class member function, static indicates that the function is a class method, rather than an instance method.
+This means that the function can be called without an instance of the class, and does not have access to the this pointer.
+
+#include <iostream>
+
+// Global variable with internal linkage
+static int global_var = 10;
+
+// Function with internal linkage
+static void foo() {
+  std::cout << "Hello from foo!" << std::endl;
+}
+
+void bar() {
+  // Local variable with retained value between function calls
+  static int local_var = 0;
+  std::cout << "local_var = " << local_var << std::endl;
+  local_var++;
+}
+
+class A {
+ public:
+  // Shared class data member
+  static int class_var;
+
+  // Class method (does not have access to the `this` pointer)
+  static void class_method() {
+    std::cout << "class_var = " << class_var << std::endl;
+  }
+};
+
+int A::class_var = 0;
+
+int main() {
+  // Access global variable and function
+  std::cout << "global_var = " << global_var << std::endl;
+  foo();
+
+  // Call function with local static variable
+  bar();
+  bar();
+  bar();
+
+  // Access class data member and call class method
+  A::class_var = 10;
+  A::class_method();
+
+  return 0;
+}
+
+
+global_var = 10
+Hello from foo!
+local_var = 0
+local_var = 1
+local_var = 2
+class_var = 10
